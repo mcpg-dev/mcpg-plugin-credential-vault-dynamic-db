@@ -1,0 +1,22 @@
+schema: mcpg.dev/plugin/v1
+id: dev.mcpg.credential.vault-dynamic-db
+name: Vault Dynamic Database Credentials
+license: BUSL-1.1
+description: |
+  `credential_issuer` plugin. Issues per-request
+  database credentials via Vault's database secrets engine. Maps
+  caller `PluginIdentity` to a Vault role per operator-configurable
+  rules (static / template) and calls `POST /v1/database/creds/<role>`
+  to mint a fresh username+password with a Vault-managed lease.
+  Plugin auto-revokes the lease on cache eviction (default) or
+  lets Vault auto-expire.
+
+  Supported auth methods: token, approle. Userpass + kubernetes
+  auth deferred to v0.2.
+
+  Operator config under `plugins[*].config`. See README.md.
+class: credential_issuer
+runtime: native-cdylib-v1
+protocol_version: "1.0"
+required_capabilities:
+  - network_outbound
