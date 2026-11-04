@@ -1,6 +1,6 @@
 [package]
 name = "mcpg-plugin-credential-vault-dynamic-db"
-version = "0.1.0-rc.6"
+version = "0.1.0"
 license = "BUSL-1.1"
 edition = "2024"
 description = "Vault dynamic-DB credential_issuer plugin for MCPG"
