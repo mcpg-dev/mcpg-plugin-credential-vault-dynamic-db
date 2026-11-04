@@ -3,7 +3,7 @@
 //!
 //! Covers only the surface this plugin needs:
 //! - Auth: token (no-op), AppRole login.
-//! - DB engine: `POST /v1/<db_mount>/creds/<role>` (issue creds).
+//! - DB engine: `GET /v1/<db_mount>/creds/<role>` (issue creds).
 //! - Lease management: `PUT /v1/sys/leases/revoke` (release).
 //! - Token cache: AppRole login response stored + refreshed on
 //!   401 (Vault returns 403 for permission, 401 for auth-expired).
@@ -128,15 +128,16 @@ impl VaultClient {
         state.token = None;
     }
 
-    /// `POST /v1/<db_mount>/creds/<role>` — issue dynamic DB
-    /// credentials. On 401 transparently re-auths once.
+    /// `GET /v1/<db_mount>/creds/<role>` — issue dynamic DB
+    /// credentials (Vault answers 405 to a POST on this read path). On 401
+    /// transparently re-auths once.
     pub async fn issue_db_creds(&self, role: &str) -> Result<DbCreds, CredentialError> {
         let url = format!("{}/v1/{}/creds/{role}", self.base_url, self.db_mount);
         let mut last_err: Option<CredentialError> = None;
         for attempt in 0..2 {
             let token = self.current_token().await?;
             let resp = self
-                .add_auth_headers(self.http.post(&url), &token)
+                .add_auth_headers(self.http.get(&url), &token)
                 .send()
                 .await
                 .map_err(|e| CredentialError::Backend {

@@ -4,7 +4,7 @@
 //! secrets engine. Operator pre-creates Vault DB roles bound to
 //! per-tenant DB users + permissions; this plugin maps caller
 //! `PluginIdentity` to a Vault role per operator-configurable
-//! rules and calls `POST /v1/database/creds/<role>`. The gateway's
+//! rules and calls `GET /v1/database/creds/<role>`. The gateway's
 //! per-(identity, plugin, target) cache holds the credential for
 //! `min(vault_lease_duration_secs, max_cache_ttl_ms / 1000)` (floored
 //! at 1s) so steady-state issuance load stays low.

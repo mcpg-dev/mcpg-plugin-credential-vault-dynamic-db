@@ -9,7 +9,7 @@ auto-rotated DB credentials scoped to the calling identity.
 
 ## What it does
 - Authenticates to Vault (token or AppRole) and, per target, calls
-  `POST /v1/<db_mount>/creds/<role>` to mint a username+password with a lease.
+  `GET /v1/<db_mount>/creds/<role>` to mint a username+password with a lease.
 - Resolves the Vault role from the caller identity per `identity_mapping`:
   `static` (fixed `vault_role`), `subject_id`, `from_role` (`identity.roles[0]`),
   or `template` (`${identity.<field>}` substitution into `role_template`).

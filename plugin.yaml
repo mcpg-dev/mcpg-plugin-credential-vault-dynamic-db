@@ -6,7 +6,7 @@ description: |
   `credential_issuer` plugin. Issues per-request
   database credentials via Vault's database secrets engine. Maps
   caller `PluginIdentity` to a Vault role per operator-configurable
-  rules (static / template) and calls `POST /v1/database/creds/<role>`
+  rules (static / template) and calls `GET /v1/database/creds/<role>`
   to mint a fresh username+password with a Vault-managed lease.
   Plugin auto-revokes the lease on cache eviction (default) or
   lets Vault auto-expire.
